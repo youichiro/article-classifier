@@ -17,4 +17,4 @@
 `% cd article-classify-app`
 
 - サーバを立てる
-`[article-classify-app]% python manage.py runserver'
+`[article-classify-app]% python manage.py runserver`
