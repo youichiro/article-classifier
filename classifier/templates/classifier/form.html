@@ -1,0 +1,15 @@
+<html>
+<head>
+	<title>記事カテゴリ分類アプリ</title>
+</head>
+
+<body>
+	<h2>記事のカテゴリを分類</h2>
+	<form action="{% url 'classifier:result' %}" method="post">{% csrf_token %}
+		<table>
+			{{ form_style.as_table }}
+			<tr><td colspan="2"><input type="submit" value="送信"></td></tr>
+		</table>
+	</form>
+</body>
+</html>
