@@ -4,7 +4,12 @@ from .classification import NaiveBayes
 
 def form(request):
     form_style = UrlForm()
-    return render(request, 'classifier/form.html', {'form_style': form_style})
+    category = ""
+    cls = NaiveBayes()
+    if request.POST:
+        post_url = request.POST['url']
+        category = cls.classify(post_url)
+    return render(request, 'classifier/form.html', {'form_style': form_style, 'category': category})
 
 def result(request):
     post_url = request.POST['url']
