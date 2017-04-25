@@ -4,15 +4,16 @@
 </head>
 
 <body>
-	<h2>記事のカテゴリを分類</h2>
+	<div class="page-header">
+		<h1>記事カテゴリ分類器</h1>
+	</div>
+	<p>Gunosyのニュース記事のURLを入力してください</p>
 	<form action="" method="post">{% csrf_token %}
-		<table>
-			{{ form_style.as_table }}
-			<tr><td colspan="2"><input type="submit" value="送信"></td></tr>
-		</table>
+		{{ form_style.as_table }}
+		<tr><td colspan="2"><input type="submit" value="送信"></td></tr>
 	</form>
 
 	<h2>分類結果</h2>
-	<p>{{ category }}</p>
+	<p><font color="blue">{{ category }}</font></p>
 </body>
 </html>
