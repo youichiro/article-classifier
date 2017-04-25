@@ -9,11 +9,12 @@
 	</div>
 	<p>Gunosyのニュース記事のURLを入力してください</p>
 	<form action="" method="post">{% csrf_token %}
-		{{ form_style.as_table }}
+		　　{{ form_style.as_table }}
 		<tr><td colspan="2"><input type="submit" value="送信"></td></tr>
 	</form>
 
-	<h2>分類結果</h2>
-	<p><font color="blue">{{ category }}</font></p>
+	<br>
+
+	<p><strong>分類結果：<font color='darkorange'>　　{{ category }}</font></strong></p>
 </body>
 </html>
