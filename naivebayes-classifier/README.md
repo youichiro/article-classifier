@@ -1,5 +1,6 @@
 # 学習用ソースコード
 
+## 構成
 - naivebayes_bernoulli.py: ベルヌーイモデルを用いたナイーブベイズ分類器
 - naivebayes_polynomial.py: 多項式モデルを用いたナイーブベイズ分類器
 - scraping_URL: 記事一覧ページから各記事のURLを抽出するプログラム
