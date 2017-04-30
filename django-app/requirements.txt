@@ -1,0 +1,4 @@
+Django==1.10
+lxml==3.7.3
+mecab-python3==0.7
+requests==2.13.0
