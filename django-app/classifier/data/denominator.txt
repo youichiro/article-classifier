@@ -1,8 +1,0 @@
-column	716870
-overseas	544349
-funny	283116
-domestic	476679
-sports	391276
-gourment	576967
-entertainment	514582
-it_science	587600

@@ -71,6 +71,7 @@ def get_vocab(path, category, filename):
         vocab_list.append(v.replace('\n',''))
     return vocab_list
 
+
 # パスを指定
 path = '../data/training_data/'
 
@@ -97,21 +98,13 @@ for c in categories:
 cls = NaiveBayes()
 cls.train(training_data)
 
-"""
-# 学習済み辞書をファイル出力
-with open('../learning_result/category_count.txt','w') as f:
-    for key, value in cls.category_count.items():
-        f.write("{}\t{}\n".format(key,value))
-
-with open('../learning_result/denominator.txt','w') as f:
-    for key, value in cls.denominator.items():
-        f.write("{}\t{}\n".format(key, value))
-
-with open('../learning_result/word_count.txt','w') as f:
-    for key, value in cls.word_count.items():
-        for k, v in value.items():
-            f.write("{}\t{}\t{}\n".format(key,k,v))
-"""
+# 学習済み辞書をpickleファイルに保存
+with open('../learning_result/category_count.pkl','wb') as f:
+    pickle.dump(cls.category_count, f)
+with open('../learning_result/denominator.pkl','wb') as f:
+    pickle.dump(cls.denominator, f)
+with open('../learning_result/word_count.pkl','wb') as f:
+    pickle.dump(cls.word_count, f)
 
 # 分類と評価
 total = 0
