@@ -63,7 +63,7 @@ class NaiveBayes:
 
 
 """ボキャブラリのリストを作る関数"""
-def get_vocab(path, category, filename):
+def get_vocab(category, filename):
     with open(path + category + '/' + filename,'r') as f:
         vocabs = f.readlines()
     vocab_list = []
@@ -71,51 +71,70 @@ def get_vocab(path, category, filename):
         vocab_list.append(v.replace('\n',''))
     return vocab_list
 
+"""学習データを形成"""
+def make_traindata(training_data):
+    train_data = []
+    for c in training_data:
+        category = categories[c]
+        for filename in c[1:]:
+            vocab_list = get_vocab(category, fillename)
+            data = [category]
+            for v in vocab_list:
+                data.append(v)
+            train_data.append(data)
+    return train_data
 
 # パスを指定
 path = '../data/training_data/'
+# 交差検定の分割数
+cross_size = 10
 
-# 訓練データとテストデータの振り分け
-training_data = []
-test_data = []
+# 各カテゴリファイルの分割するファイル数
+file_list = []
+split_num = []
 for c in categories:
-    file_list = os.listdir(path + c) # データのファイル名を取得
-    random.shuffle(file_list)        # 要素をシャッフル
-    test_file = file_list[:100]      # 先頭から100個をテストデータに使う
-    test_data.append(test_file)
-    training_file = file_list[100:]  # 残りを学習データに使う
+    files = os.listdir(path + c)
+    file_list.append(files)
+    split = len(files) // cross_size
+    split_num.append(split)
 
-    # 学習データの作成
-    for filename in training_file:
-        vocab_list = get_vocab(path, c, filename)
-        data = []
-        data.append(c)
-        for v in vocab_list:
-            data.append(v)
-        training_data.append(data)
-
-# 学習
+# 10分割交差検定
 cls = NaiveBayes()
-cls.train(training_data)
+for cross in range(cross_size):
+    test_data = []
+    training_data = []
 
-# 学習済み辞書をpickleファイルに保存
-with open('../learning_result/category_count.pkl','wb') as f:
-    pickle.dump(cls.category_count, f)
-with open('../learning_result/denominator.pkl','wb') as f:
-    pickle.dump(cls.denominator, f)
-with open('../learning_result/word_count.pkl','wb') as f:
-    pickle.dump(cls.word_count, f)
+    for i in range(len(categories)):
+        # fileを10分割したリストを作成
+        slices = [file_list[i][s:s+split_num[i]] for s in range(0, len(file_list[i]), split_num[i])]
+        # cross番目をテストデータにする
+        test_data.append(slices[cross])
 
-# 分類と評価
-total = 0
-for c in range(len(test_data)):
-    accuracy = 0
-    category = categories[c]
-    for i in range(len(test_data[c])):
-        filename = test_data[c][i]
-        test = get_vocab(path, category, filename)
-        if cls.classify(test) == category:
-            accuracy += 1
-    total += accuracy
-    print("{}\t{}/100".format(category, accuracy))
-print("total: {}".format(total/800))
+        # cross番目以外を学習データにする
+        training = [categories[i]]
+        for s in slices:
+            if s == slices[cross]:
+                pass
+            else:
+                for f in s:
+                    training.append(f)
+        training_data.append(training)
+
+    # 学習データを形成
+    training_vocab = make_traindata(training_data)
+    cls.train(training_vocab)
+
+    # 分類と評価
+    total = 0
+    count_file = 0
+    for c in range(len(test_data)):
+        accuracy = 0
+        category = categories[c]
+        for i in range(len(test_data[c])):
+            filename = test_data[c][i]
+            test = get_vocab(category, filename)
+            if cls.classify(test) == category:
+                accuracy += 1
+            count_file += 1
+        total += accuracy
+    print("cross: {}\taccuracy: {}".format(cross + 1, total / count_file))
