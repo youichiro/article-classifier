@@ -1,19 +1,18 @@
 # -*- coding:utf-8 -*-
 import math
-import sys
 import os
-import random
 from collections import defaultdict
-from resources.categories import * # 定数の読み込み
+from resources.categories import *  # 定数の読み込み
 
-"""多項式ベルヌーイモデル"""
+
 class NaiveBayes:
+    """多項式ベルヌーイモデル"""
     def __init__(self):
-        self.categories = set()   # カテゴリの集合
-        self.vocabularies = set() # ボキャブラリの集合
-        self.word_count = {}      # word_count[category][word]:カテゴリでの単語の出現回数
-        self.category_count = {}  # category_count[category]:カテゴリの出現回数
-        self.denominator = {}     # denominator[category]:P(word|category)の分母の値
+        self.categories = set()     # カテゴリの集合
+        self.vocabularies = set()   # ボキャブラリの集合
+        self.word_count = {}        # カテゴリでの単語の出現回数
+        self.category_count = {}    # カテゴリの出現回数
+        self.denominator = {}       # P(word|category)の分母の値
 
     def train(self, train_data):
         """ナイーブベイズ分類器の訓練"""
@@ -33,7 +32,8 @@ class NaiveBayes:
                 self.word_count[category][w] += 1
         # 単語の条件付き確率の分母の値をあらかじめ一括計算しておく
         for c in self.categories:
-            self.denominator[c] = sum(self.word_count[c].values()) + len(self.vocabularies)
+            value = self.word_count[c].values()
+            self.denominator[c] = sum(value + len(self.vocabularies))
 
     def classify(self, test_data):
         """事後確率の対数 log(P(cat|doc)) が最も大きなカテゴリを返す"""
@@ -48,31 +48,32 @@ class NaiveBayes:
 
     def score(self, words, category):
         """文書が与えられたときのカテゴリの事後確率の対数 log(P(cat|doc)) を求める"""
-        total = sum(self.category_count.values()) # 総文書数
+        total = sum(self.category_count.values())   # 総文書数
         if self.category_count[category] == 0:
             score = -10.0
         else:
-            score = math.log(float(self.category_count[category]) / total) # log P(cat)
+            score = math.log(float(self.category_count[category]) / total)
         for w in words:
-            score += math.log(self.wordProb(w, category)) # log P(word|cat)
+            score += math.log(self.wordProb(w, category))   # log P(word|cat)
         return score
 
-    def wordProb(self, word, category):
+    def wordProb(self, word, c):
         """単語の条件付き確率 P(word|cat) を求める"""
-        return float(self.word_count[category][word] + 1) / float(self.denominator[category])
+        return float(self.word_count[c][word]+1)/float(self.denominator[c])
 
 
-"""ボキャブラリのリストを作る関数"""
 def get_vocab(category, filename):
-    with open(path + category + '/' + filename,'r') as f:
+    """ボキャブラリのリストを作る関数"""
+    with open(path + category + '/' + filename, 'r') as f:
         vocabs = f.readlines()
     vocab_list = []
     for v in vocabs:
-        vocab_list.append(v.replace('\n',''))
+        vocab_list.append(v.replace('\n', ''))
     return vocab_list
 
-"""学習データを形成"""
+
 def make_traindata(training_data):
+    """学習データを形成"""
     train_data = []
     for c in training_data:
         category = categories[c]
@@ -106,7 +107,10 @@ for cross in range(cross_size):
 
     for i in range(len(categories)):
         # fileを10分割したリストを作成
-        slices = [file_list[i][s:s+split_num[i]] for s in range(0, len(file_list[i]), split_num[i])]
+        slices = 0
+        for s in range(0, len(file_list[i]), split_num[i]):
+            slices.append(file_list[i][s:s+split_num[i]])
+
         # cross番目をテストデータにする
         test_data.append(slices[cross])
 

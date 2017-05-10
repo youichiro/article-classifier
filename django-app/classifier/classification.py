@@ -7,24 +7,25 @@ import os
 from collections import defaultdict
 import pickle
 
+
 class NaiveBayes:
     """ベルヌーイモデルによる分類"""
     def __init__(self):
         self.word_count = {}
         self.category_count = {}
         self.denominator = {}
-        self.load_dict() # 辞書復元
+        self.load_dict()    # 辞書復元
 
     def load_dict(self):
         """学習済み辞書の復元"""
-        path = os.path.abspath(".") + "/classifier" # カウントディレクトリのパス
-        with open(path+'/data/category_count.pkl','rb') as f:
+        path = os.path.abspath(".") + "/classifier"     # カウントディレクトリのパス
+        with open(path+'/data/category_count.pkl', 'rb') as f:
             self.category_count = pickle.load(f)
-        with open(path+'/data/denominator.pkl','rb') as f:
+        with open(path+'/data/denominator.pkl', 'rb') as f:
             self.denominator = pickle.load(f)
-        with open(path+'/data/word_count.pkl','rb') as f:
+        with open(path+'/data/word_count.pkl', 'rb') as f:
             self.word_count = pickle.load(f)
-                
+
     def scraping(self, target_url):
         """URLからHTMLを読み込み、本文を抽出する関数"""
         target_html = requests.get(target_url).text
@@ -35,7 +36,7 @@ class NaiveBayes:
     def mecab(self, article_text):
         """テキストから名詞を抽出する関数"""
         tagger = MeCab.Tagger('Ochasen')
-        tagger.parse('') # エラー回避のため
+        tagger.parse('')    # エラー回避のため
         node = tagger.parseToNode(article_text)
         noun_list = []
         while node:
@@ -60,7 +61,7 @@ class NaiveBayes:
                 max = p
                 best = c
         return best
-    
+
     def score(self, words, category):
         """確率を計算"""
         total = sum(self.category_count.values())
@@ -72,5 +73,7 @@ class NaiveBayes:
             score += math.log(self.wordProb(word, category))
         return score
 
-    def wordProb(self, word, category):
-        return float(self.word_count[category][word]+1) / float(self.denominator[category])
+    def wordProb(self, word, c):
+        over = self.word_count[c][word] + 1
+        under = self.denominator[c]
+        return float(over / under)
