@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import math, sys, os, random
 from collections import defaultdict
+from resources.categories import * # 定数の読み込み
 
 class Feature:
     """Feature for NaiveBayes"""
@@ -54,10 +55,6 @@ def get_feature(path, category, filename):
     for f in features:
         feature_list.append(f.replace('\n',''))
     return feature_list
-
-
-# カテゴリリスト
-categories = ["column","domestic","entertainment","funny","gourment","it_science","overseas","sports"]
 
 # パスを指定
 path = '../data/training_data/'

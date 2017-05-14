@@ -4,6 +4,7 @@
 """
 import lxml.html
 import requests
+from resources.categories import * # 定数の読み込み
 
 def get_URLs(target_url):
     # ニュースの記事を所得する
@@ -15,7 +16,6 @@ def get_URLs(target_url):
         url_list.append(article_url[i].attrib['href'])
     return url_list
 
-categories = ['column','domestic','entertainment','funny','gourment','it_science','overseas','sports']
 
 # カテゴリごとのURLを取得し、ファイルに書き込む
 for category in range(len(categories)):

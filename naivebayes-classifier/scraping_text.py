@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 import lxml.html, requests
+from resources.categories import * # 定数の読み込み
 
 """記事から本文を抽出し、ファイルに出力する関数"""
 def get_text(target_url, category, number):
@@ -12,8 +13,6 @@ def get_text(target_url, category, number):
     for text in article_text:
         f1.write(text+'\n')
     f1.close()
-
-categories = ['column','domestic','entertainment','funny','gourment','it_science','overseas','sports']
 
 
 for category in categories:
@@ -28,4 +27,3 @@ for category in categories:
         number += 1
         print(category+str(number))
         get_text(target_url.replace('\n',''), category, number)
-

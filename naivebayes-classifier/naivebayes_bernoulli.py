@@ -4,6 +4,7 @@ import sys
 import os
 import random
 from collections import defaultdict
+from resources.categories import * # 定数の読み込み
 
 """多項式ベルヌーイモデル"""
 class NaiveBayes:
@@ -70,8 +71,7 @@ def get_vocab(path, category, filename):
         vocab_list.append(v.replace('\n',''))
     return vocab_list
 
-# カテゴリーとパスを指定
-categories = ["column","domestic","entertainment","funny","gourment","it_science","overseas","sports"]
+# パスを指定
 path = '../data/training_data/'
 
 # 訓練データとテストデータの振り分け
@@ -126,4 +126,3 @@ for c in range(len(test_data)):
     total += accuracy
     print("{}\t{}/100".format(category, accuracy))
 print("total: {}".format(total/800))
-
