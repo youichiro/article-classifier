@@ -1,14 +1,24 @@
 from django.shortcuts import render
 from .form import UrlForm
-from .classification import NaiveBayes
+import os
+import sys
+import pickle
+
+sys.path.append(os.path.abspath(".") + '/../naivebayes-classifier')
+
+# 学習モデルを読み込む
+path = os.path.abspath("../naivebayes-classifier/resources")
+with open(path+'/model.pkl', 'rb') as f:
+    obj = pickle.load(f)
+obj.train()
 
 def form(request):
     form_style = UrlForm()
     category = ""
-    cls = NaiveBayes()
+    
     if request.POST:
         post_url = request.POST['url']
-        category_en = cls.classify(post_url)
+        category_en = obj.classify(post_url)
         if category_en == "column":
             category = "コラム"
         elif category_en == "overseas":
