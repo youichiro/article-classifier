@@ -1,8 +1,0 @@
-column	1896
-overseas	1727
-funny	1192
-domestic	1638
-sports	1654
-gourment	1893
-entertainment	1866
-it_science	1879

@@ -5,6 +5,7 @@ import requests
 import MeCab
 import os
 from collections import defaultdict
+import pickle
 
 class NaiveBayes:
     """ベルヌーイモデルによる分類"""
@@ -12,31 +13,17 @@ class NaiveBayes:
         self.word_count = {}
         self.category_count = {}
         self.denominator = {}
-        self.remake_dict() # 辞書復元
+        self.load_dict() # 辞書復元
 
-    def remake_dict(self):
+    def load_dict(self):
         """学習済み辞書の復元"""
-        path = os.path.abspath(".") + "/classifier" # カウントディレクトリ
-        # category_countの復元
-        with open(path+'/data/category_count.txt','r') as f:
-            category_data = f.readlines()
-        for line in category_data:
-            element = line.replace('\n','').split('\t')
-            self.category_count[element[0]] = int(element[1])
-        # denominatorの復元
-        with open(path+'/data/denominator.txt','r') as f:
-            denominator_data = f.readlines()
-        for line in denominator_data:
-            element = line.replace('\n','').split('\t')
-            self.denominator[element[0]] = int(element[1])
-        # word_countの復元
-        for c in self.category_count.keys():
-            self.word_count[c] = defaultdict(int)
-        with open(path+'/data/word_count.txt','r') as f:
-            word_data = f.readlines()
-        for line in word_data:
-            element = line.replace('\n','').split('\t')
-            self.word_count[element[0]][element[1]] = int(element[2])
+        path = os.path.abspath(".") + "/classifier" # カウントディレクトリのパス
+        with open(path+'/data/category_count.pkl','rb') as f:
+            self.category_count = pickle.load(f)
+        with open(path+'/data/denominator.pkl','rb') as f:
+            self.denominator = pickle.load(f)
+        with open(path+'/data/word_count.pkl','rb') as f:
+            self.word_count = pickle.load(f)
                 
     def scraping(self, target_url):
         """URLからHTMLを読み込み、本文を抽出する関数"""
@@ -87,4 +74,3 @@ class NaiveBayes:
 
     def wordProb(self, word, category):
         return float(self.word_count[category][word]+1) / float(self.denominator[category])
-
