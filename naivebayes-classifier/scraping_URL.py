@@ -4,9 +4,10 @@
 """
 import lxml.html
 import requests
-from resources.categories import * # 定数の読み込み
+from resources.categories import *  # 定数の読み込み
 
-def get_URLs(target_url):
+
+def get_URL(target_url):
     # ニュースの記事を所得する
     target_html = requests.get(target_url).text
     root = lxml.html.fromstring(target_html)
@@ -23,8 +24,9 @@ for category in range(len(categories)):
     url_list = []
     for page in range(100):
         print(page+1)
-        url_list.extend(get_URLs('https://gunosy.com/categories/' + str(category+1) + '?page=' + str(page+1)))
-    f = open('../data/'+categories[category]+'_urls.txt','w')
+        base_url = 'https://gunosy.com/categosies/'
+        url_list.extend(get_URL(base_url+str(category+1)+'?page='+str(page+1)))
+    f = open('../data/'+categories[category]+'_urls.txt', 'w')
     for line in url_list:
         f.write(line + '\n')
     f.close
