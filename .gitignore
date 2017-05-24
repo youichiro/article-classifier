@@ -2,3 +2,4 @@
 django-app/classifier/__pycache__
 naivebayes-classifier/__pycache__
 naivebayes-classifier/resources/__pycache__
+naivebayes-classifier/data
