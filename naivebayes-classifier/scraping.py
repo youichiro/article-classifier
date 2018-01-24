@@ -24,8 +24,9 @@ def get_article_text(article_url):
     """記事から本文を抽出する"""
     article_html = requests.get(article_url).text
     root = lxml.html.fromstring(article_html)
-    article_text = root.xpath('//div[@class="article gtm-click"]/p/text()')
-    return ''.join(article_text)
+    title = root.xpath('//h1[@class="article_header_title"]/text()')
+    text = root.xpath('//div[@class="article gtm-click"]/p/text()')
+    return ''.join(title) + ''.join(text)
 
 
 def get_article_nouns(article_text):
