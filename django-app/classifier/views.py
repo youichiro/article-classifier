@@ -12,6 +12,7 @@ with open(path+'/model.pkl', 'rb') as f:
     obj = pickle.load(f)
 obj.train()
 
+
 def form(request):
     form_style = UrlForm()
     category = ""

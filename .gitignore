@@ -1,5 +1,13 @@
 .python-version
 django-app/classifier/__pycache__
 naivebayes-classifier/__pycache__
-naivebayes-classifier/resources/__pycache__
-naivebayes-classifier/data
+naivebayes-classifier/resources/*
+naivebayes-classifier/data/column/*
+naivebayes-classifier/data/domestic/*
+naivebayes-classifier/data/entertainment/*
+naivebayes-classifier/data/funny/*
+naivebayes-classifier/data/gourmet/*
+naivebayes-classifier/data/it_science/*
+naivebayes-classifier/data/overseas/*
+naivebayes-classifier/data/sports/*
+.idea/*
