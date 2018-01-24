@@ -30,7 +30,9 @@ def get_article_text(article_url):
 
 def get_article_nouns(article_text):
     """本文から名詞を抽出する"""
-    tagger = MeCab.Tagger('Ochasen')
+    # neologdを使う
+    # https://github.com/neologd/mecab-ipadic-neologd/blob/master/README.ja.md
+    tagger = MeCab.Tagger('-d /usr/local/mecab/lib/mecab/dic/mecab-ipadic-neologd')
     tagger.parse('')
     node = tagger.parseToNode(article_text)
     noun_list = []
