@@ -1,5 +1,7 @@
 .python-version
 django-app/classifier/__pycache__
+django-app/mysite/__pycache__
+django-app/mysite/__pycache__/*
 naivebayes-classifier/__pycache__
 naivebayes-classifier/resources/*
 naivebayes-classifier/data/column/*

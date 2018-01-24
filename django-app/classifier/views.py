@@ -9,17 +9,17 @@ sys.path.append(os.path.abspath(".") + '/../naivebayes-classifier')
 # 学習モデルを読み込む
 path = os.path.abspath("../naivebayes-classifier/resources")
 with open(path+'/model.pkl', 'rb') as f:
-    obj = pickle.load(f)
-obj.train()
+    nb = pickle.load(f)
+nb.train()
 
 
 def form(request):
     form_style = UrlForm()
     category = ""
-    
+
     if request.POST:
         post_url = request.POST['url']
-        category_en = obj.classify(post_url)
+        category_en = nb.classify(post_url)
         if category_en == "column":
             category = "コラム"
         elif category_en == "overseas":
