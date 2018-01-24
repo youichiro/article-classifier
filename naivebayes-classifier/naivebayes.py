@@ -3,7 +3,7 @@ import math
 import os
 from collections import defaultdict
 from constants import Categories
-from scraping import get_text, get_nouns
+from scraping import get_article_text, get_article_nouns
 
 
 class NaiveBayes:
@@ -38,8 +38,8 @@ class NaiveBayes:
 
     def classify(self, article_url):
         """入力された記事URLからカテゴリ分類"""
-        text = get_text(article_url)
-        nouns = get_nouns(text)
+        text = get_article_text(article_url)
+        nouns = get_article_nouns(text)
         return self.get_best_category(nouns)
 
     def get_best_category(self, vocab_list):
@@ -131,32 +131,13 @@ def main():
         article_count = 0
         for category, files in test_files.items():
             for file_name in files:
-                #print(str(category)+str(file_name))
                 test_vocab_list = get_vocab(category, file_name)
                 result = nb.get_best_category(test_vocab_list)
-                print("result: {}\tans: {}".format(result, category))
                 if result == category:
                     accuracy += 1
                 article_count += 1
         print("cross: {}\taccuracy: {}%".format(cross + 1, accuracy / article_count * 100))
 
-
-"""
-        # 分類と評価
-        total = 0
-        count_file = 0
-        for c in range(len(test_data)):
-            accuracy = 0
-            category = CATEGORIES[c]
-            for i in range(len(test_data[c])):
-                filename = test_data[c][i]
-                test = get_vocab(category, filename)
-                if cls.classify_test(test) == category:
-                    accuracy += 1
-                count_file += 1
-            total += accuracy
-        print("cross: {}\taccuracy: {}".format(cross + 1, total / count_file))
-"""
 
 if __name__ == '__main__':
     main()

@@ -9,7 +9,7 @@ from tqdm import tqdm
 from constants import Categories
 
 
-def get_urls(target_url):
+def get_article_urls(target_url):
     """ページに配置されている記事のURLを取得する"""
     target_html = requests.get(target_url).text
     root = lxml.html.fromstring(target_html)
@@ -20,7 +20,7 @@ def get_urls(target_url):
     return url_list
 
 
-def get_text(article_url):
+def get_article_text(article_url):
     """記事から本文を抽出する"""
     article_html = requests.get(article_url).text
     root = lxml.html.fromstring(article_html)
@@ -28,7 +28,7 @@ def get_text(article_url):
     return ''.join(article_text)
 
 
-def get_nouns(article_text):
+def get_article_nouns(article_text):
     """本文から名詞を抽出する"""
     tagger = MeCab.Tagger('Ochasen')
     tagger.parse('')
@@ -53,7 +53,7 @@ def save_nouns_to_textfile(category, number, nouns):
 
 
 def main():
-    base_url = 'https://gunosy.com/categosies/'
+    base_url = 'https://gunosy.com/categories/'
 
     # 記事のURLを収集する
     print("scraping url")
@@ -61,9 +61,9 @@ def main():
     for category in Categories:
         print(category.name)
         url_list = []
-        for page in tqdm(range(100)):
+        for page in tqdm(range(5)):
             target_url = base_url + str(category.value) + '?page=' + str(page + 1)
-            url_list.extend((get_urls(target_url)))
+            url_list.extend((get_article_urls(target_url)))
         all_url[category.name] = url_list
 
     # 記事の本文を取得し、名詞のみを抽出してテキストファイルに保存する
@@ -71,8 +71,8 @@ def main():
     for category, article_urls in all_url.items():
         print(category)
         for number, article_url in enumerate(tqdm(article_urls)):
-            text = get_text(article_url)
-            nouns = get_nouns(text)
+            text = get_article_text(article_url)
+            nouns = get_article_nouns(text)
             save_nouns_to_textfile(category, number, nouns)
 
 
